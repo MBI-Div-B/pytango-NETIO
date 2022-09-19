@@ -54,7 +54,6 @@ class NETIO_230B(Device):
     def read_socket(self, attr):
         """Reads the state of the Socket attr"""
         self.tn.write(bytes('port {}\n'.format(attr.get_name()[6:]),'utf-8'))
-        #self.tn.msg(b'check1')
         ret = str(self.tn.read_until(b'check1', timeout=0.1))
         attr.set_value(bool(int(ret[-6])))
         return bool(int(ret[-6]))
@@ -105,15 +104,10 @@ class NETIO_230B(Device):
         self.tn.write(b'port list\n')
         self.tn.msg(b'check1')
         ret = self.tn.read_until(b'check1', timeout=1)
-        #self.info_stream(ret)
         ret = str(ret)
         ret = ret.split(' ')[-1]
-        #self.info_stream(str(len(ret)+1))
         for i in range(len(ret)-5):
             self.create_enum_attributes('socket'+str(i+1))
-        #self.tn.write(bytes('port list 0000', 'utf-8'))
-        #self.info_stream(str(self.read_socket(socket1)))
-
         # PROTECTED REGION END #    //  NETIO_230B.init_device
 
     def always_executed_hook(self):
