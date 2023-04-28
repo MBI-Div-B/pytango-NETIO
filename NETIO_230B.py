@@ -7,10 +7,6 @@
 # Distributed under the terms of the GPL license.
 # See LICENSE.txt for more info.
 
-""" 
-
-"""
-
 # PyTango imports
 from encodings import utf_8
 import tango
@@ -26,6 +22,7 @@ from tango import AttrWriteType, PipeWriteType
 # PROTECTED REGION ID(NETIO_230B.additionnal_import) ENABLED START #
 from enum import IntEnum
 from telnetlib import Telnet
+
 
 class socket_state(IntEnum):
     OFF = 0
@@ -58,9 +55,7 @@ class NETIO_230B(Device):
         attr.set_value(bool(int(ret[-6])))
         return bool(int(ret[-6]))
         
-        
-
-    def write_socket(self,attr):
+    def write_socket(self, attr):
         value = bool(attr.get_write_value())
         self.info_stream(str(attr.get_write_value))
         self.info_stream("Writting attribute %s", attr.get_name())
@@ -99,7 +94,7 @@ class NETIO_230B(Device):
         Device.init_device(self)
         # PROTECTED REGION ID(NETIO_230B.init_device) ENABLED START #
         self.tn = Telnet()
-        self.tn.open(self.ipaddress, port=self.port , timeout=1)
+        self.tn.open(self.ipaddress, port=self.port, timeout=1)
         self.tn.write(bytes('login ' + self.username + ' ' + self.password + '\n','utf-8'))
         self.tn.write(b'port list\n')
         self.tn.msg(b'check1')
@@ -152,7 +147,7 @@ class NETIO_230B(Device):
             access=AttrWriteType.READ_WRITE,
             label=argin,
         ).to_attr()
-        self.add_attribute(attr,r_meth=self.read_socket,w_meth=self.write_socket)
+        self.add_attribute(attr, r_meth=self.read_socket, w_meth=self.write_socket)
         # PROTECTED REGION END #    //  NETIO_230B.create_enum_attributes
 
 # ----------
